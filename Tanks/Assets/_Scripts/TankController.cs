@@ -44,6 +44,9 @@ public class TankController : MonoBehaviour {
                 if (Input.GetKeyDown(KeyCode.W))    { accelerationInput += 1; }
                 if (Input.GetKeyUp(KeyCode.S))      { accelerationInput += 1; }
                 if (Input.GetKeyUp(KeyCode.W))      { accelerationInput -= 1; }
+
+                //Shoot shit!
+                if (Input.GetKeyDown(KeyCode.Space))    { Shoot(); }
                 break;
             case 2:
                 if (Input.GetKeyDown(KeyCode.LeftArrow))    { turningInput -= 1; }
@@ -56,6 +59,9 @@ public class TankController : MonoBehaviour {
                 if (Input.GetKeyDown(KeyCode.UpArrow))      { accelerationInput += 1; }
                 if (Input.GetKeyUp(KeyCode.DownArrow))      { accelerationInput += 1; }
                 if (Input.GetKeyUp(KeyCode.UpArrow))        { accelerationInput -= 1; }
+
+                //Shoot shit!
+                if (Input.GetKeyDown(KeyCode.KeypadEnter))  { Shoot(); }
                 break;
             default:
                 print("INVALID PLAYERNUM");
@@ -71,14 +77,13 @@ public class TankController : MonoBehaviour {
         rotation.y += turningInput;
         transform.localRotation = Quaternion.Euler(rotation);
 
-        //This is forwards and backwards movement
+        //Forwards and backwards movement
         Vector3 newVelocity = transform.forward.normalized * accelerationInput;
         GetComponent<Rigidbody>().velocity = newVelocity;
+    }
 
-        //Shoot shit!
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter)) {
-            bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized, Quaternion.identity) as GameObject;
-            bullet.GetComponent<Rigidbody>().velocity = transform.forward.normalized * bulletSpeed;
-        }
+    void Shoot() {
+        bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized, Quaternion.identity) as GameObject;
+        bullet.GetComponent<Rigidbody>().velocity = transform.forward.normalized * bulletSpeed;
     }
 }
