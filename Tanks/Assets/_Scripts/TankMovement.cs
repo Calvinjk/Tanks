@@ -27,6 +27,5 @@ public class TankMovement : MonoBehaviour {
         Vector3 newVelocity = transform.forward.normalized * accelerationInput;
         GetComponent<Rigidbody>().velocity = newVelocity;
 
-        print(transform.forward);
     }
 }
