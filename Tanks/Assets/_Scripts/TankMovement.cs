@@ -3,9 +3,11 @@ using System.Collections;
 
 public class TankMovement : MonoBehaviour {
 
-    public float horizontalInput = 0f;
-    public float verticalInput = 0f;
-    public float playerSpeed = 1f;
+    public float accelerationInput = 0f;
+    public float turningInput = 0f;
+    public float moveSpeed = 1f;
+    public float turnSpeed = 1f;
+    public Vector3 rotation;
 
 	// Use this for initialization
 	void Start () {
@@ -13,10 +15,18 @@ public class TankMovement : MonoBehaviour {
 	}
 
     void FixedUpdate() {
-        horizontalInput = Input.GetAxis("Horizontal") * playerSpeed;
-        verticalInput = Input.GetAxis("Vertical") * playerSpeed;
+        turningInput = Input.GetAxis("Horizontal") * turnSpeed;
+        accelerationInput = Input.GetAxis("Vertical") * moveSpeed;
 
-        Vector3 newVelocity = new Vector3(horizontalInput, 0, verticalInput);
+        //Rotation stuff
+        rotation = transform.localRotation.eulerAngles;
+        rotation.y += turningInput;
+        transform.localRotation = Quaternion.Euler(rotation);
+
+        //This is forwards and backwards movement
+        Vector3 newVelocity = transform.forward.normalized * accelerationInput;
         GetComponent<Rigidbody>().velocity = newVelocity;
+
+        print(transform.forward);
     }
 }
