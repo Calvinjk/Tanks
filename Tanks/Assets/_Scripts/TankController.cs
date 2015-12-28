@@ -39,6 +39,7 @@ public class TankController : MonoBehaviour {
         //Shoot shit!
         if (Input.GetKeyDown(KeyCode.Space)) {
             bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized, Quaternion.identity) as GameObject;
+
             bullet.GetComponent<Rigidbody>().velocity = transform.forward.normalized * bulletSpeed;
         }
     }
