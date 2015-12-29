@@ -6,7 +6,6 @@ public class TankController : MonoBehaviour {
     public int          playerNum           = 0;
     public float        moveSpeed           = 1f;
     public float        turnSpeed           = 1f;
-    public float        bulletSpeed         = 1f;
     public GameObject   bulletPrefab;
     public bool         _________________________________;
     public float        accelerationInput   = 0f;
@@ -84,6 +83,9 @@ public class TankController : MonoBehaviour {
 
     void Shoot() {
         bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized, Quaternion.identity) as GameObject;
-        bullet.GetComponent<Rigidbody>().velocity = transform.forward.normalized * bulletSpeed;
+
+        BulletController bulletController = (BulletController)bullet.GetComponent(typeof(BulletController));
+
+        bulletController.direction = transform.forward.normalized;
     }
 }
