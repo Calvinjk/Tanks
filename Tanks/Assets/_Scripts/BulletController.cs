@@ -31,6 +31,10 @@ public class BulletController : MonoBehaviour {
                 Destroy(this.gameObject);
             }
         }
+
+        if (coll.gameObject.tag == "Player") {
+            Destroy(coll.gameObject);
+        }
     }
 
     void Bounce(Vector3 center, Vector3 contactPoint) {
