@@ -6,10 +6,12 @@ public class TankController : MonoBehaviour {
     public int          playerNum           = 0;
     public float        moveSpeed           = 1f;
     public float        turnSpeed           = 1f;
+    public float        maxWeaponCooldown      = 1f;
     public GameObject   bulletPrefab;
     public bool         _________________________________;
     public float        accelerationInput   = 0f;
     public float        turningInput        = 0f;
+    public float        weaponCooldown = 0f;
     public Vector3      pos;
     public Vector3      rotation;  
     public GameObject   bullet;
@@ -22,6 +24,10 @@ public class TankController : MonoBehaviour {
     void FixedUpdate() {
         //Update and reset variables
         pos = transform.position;
+        if (weaponCooldown > 0) {
+            weaponCooldown -= Time.deltaTime;
+            if (weaponCooldown < 0) { weaponCooldown = 0; }
+        }
 
         //I am upset that I have to do this, but this is the fix for now.
         if (turningInput < -1)      { turningInput = -1; }
@@ -45,7 +51,7 @@ public class TankController : MonoBehaviour {
                 if (Input.GetKeyUp(KeyCode.W))      { accelerationInput -= 1; }
 
                 //Shoot shit!
-                if (Input.GetKeyDown(KeyCode.Space))    { Shoot(); }
+                if (Input.GetKey(KeyCode.Space))    { Shoot(); }
                 break;
             case 2:
                 if (Input.GetKeyDown(KeyCode.LeftArrow))    { turningInput -= 1; }
@@ -60,7 +66,7 @@ public class TankController : MonoBehaviour {
                 if (Input.GetKeyUp(KeyCode.UpArrow))        { accelerationInput -= 1; }
 
                 //Shoot shit!
-                if (Input.GetKeyDown(KeyCode.KeypadEnter))  { Shoot(); }
+                if (Input.GetKey(KeyCode.KeypadEnter))  { Shoot(); }
                 break;
             default:
                 print("INVALID PLAYERNUM");
@@ -82,10 +88,15 @@ public class TankController : MonoBehaviour {
     }
 
     void Shoot() {
-        bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized, Quaternion.identity) as GameObject;
+        if (weaponCooldown == 0) {
+            bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized, Quaternion.identity) as GameObject;
 
-        BulletController bulletController = (BulletController)bullet.GetComponent(typeof(BulletController));
+            BulletController bulletController = (BulletController)bullet.GetComponent(typeof(BulletController));
 
-        bulletController.direction = transform.forward.normalized;
+            bulletController.direction = transform.forward.normalized;
+
+            //Reset weapon cooldown
+            weaponCooldown = maxWeaponCooldown;
+        }
     }
 }
