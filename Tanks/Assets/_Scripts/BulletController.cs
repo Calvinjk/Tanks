@@ -34,6 +34,7 @@ public class BulletController : MonoBehaviour {
 
         if (coll.gameObject.tag == "Player") {
             Destroy(coll.gameObject);
+            Destroy(this.gameObject);
         }
     }
 
