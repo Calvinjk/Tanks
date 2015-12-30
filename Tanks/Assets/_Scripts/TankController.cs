@@ -6,7 +6,8 @@ public class TankController : MonoBehaviour {
     public int          playerNum           = 0;
     public float        moveSpeed           = 1f;
     public float        turnSpeed           = 1f;
-    public float        maxWeaponCooldown      = 1f;
+    public float        maxWeaponCooldown   = 1f;
+    public bool         invincible          = false;
     public GameObject   bulletPrefab;
     public bool         _________________________________;
     public float        accelerationInput   = 0f;
@@ -29,44 +30,35 @@ public class TankController : MonoBehaviour {
             if (weaponCooldown < 0) { weaponCooldown = 0; }
         }
 
-        //I am upset that I have to do this, but this is the fix for now.
-        if (turningInput < -1)      { turningInput = -1; }
-        if (turningInput > 1)       { turningInput = 1; }
-        if (accelerationInput < -1) { accelerationInput = -1; }
-        if (accelerationInput > 1)  { accelerationInput = 1; }
-
         //Check Player and get inputs
         switch (playerNum) {
             case 1:
                 //Turning input
-                if (Input.GetKeyDown(KeyCode.A))    { turningInput -= 1; }
-                if (Input.GetKeyDown(KeyCode.D))    { turningInput += 1; }
-                if (Input.GetKeyUp(KeyCode.A))      { turningInput += 1; }
-                if (Input.GetKeyUp(KeyCode.D))      { turningInput -= 1; }
+                if (Input.GetKey(KeyCode.A))                                { turningInput = -1; }
+                if (Input.GetKey(KeyCode.D))                                { turningInput = 1; }
+                if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))   { turningInput = 0; }
 
                 //Acceleration input
-                if (Input.GetKeyDown(KeyCode.S))    { accelerationInput -= 1; }
-                if (Input.GetKeyDown(KeyCode.W))    { accelerationInput += 1; }
-                if (Input.GetKeyUp(KeyCode.S))      { accelerationInput += 1; }
-                if (Input.GetKeyUp(KeyCode.W))      { accelerationInput -= 1; }
+                if (Input.GetKey(KeyCode.S))                                { accelerationInput = -1; }
+                if (Input.GetKey(KeyCode.W))                                { accelerationInput = 1; }
+                if (!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))   { accelerationInput = 0; }
 
                 //Shoot shit!
-                if (Input.GetKey(KeyCode.Space))    { Shoot(); }
+                if (Input.GetKey(KeyCode.Space))                            { Shoot(); }
                 break;
             case 2:
-                if (Input.GetKeyDown(KeyCode.LeftArrow))    { turningInput -= 1; }
-                if (Input.GetKeyDown(KeyCode.RightArrow))   { turningInput += 1; }
-                if (Input.GetKeyUp(KeyCode.LeftArrow))      { turningInput += 1; }
-                if (Input.GetKeyUp(KeyCode.RightArrow))     { turningInput -= 1; }
+                //Turning input
+                if (Input.GetKey(KeyCode.LeftArrow))                                        { turningInput = -1; }
+                if (Input.GetKey(KeyCode.RightArrow))                                       { turningInput = 1; }
+                if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))  { turningInput = 0; }
 
                 //Acceleration input
-                if (Input.GetKeyDown(KeyCode.DownArrow))    { accelerationInput -= 1; }
-                if (Input.GetKeyDown(KeyCode.UpArrow))      { accelerationInput += 1; }
-                if (Input.GetKeyUp(KeyCode.DownArrow))      { accelerationInput += 1; }
-                if (Input.GetKeyUp(KeyCode.UpArrow))        { accelerationInput -= 1; }
+                if (Input.GetKey(KeyCode.DownArrow))                                        { accelerationInput = -1; }
+                if (Input.GetKey(KeyCode.UpArrow))                                          { accelerationInput = 1; }
+                if (!Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.UpArrow))     { accelerationInput = 0; }
 
                 //Shoot shit!
-                if (Input.GetKey(KeyCode.KeypadEnter))  { Shoot(); }
+                if (Input.GetKey(KeyCode.KeypadEnter))                                      { Shoot(); }
                 break;
             default:
                 print("INVALID PLAYERNUM");
@@ -87,7 +79,13 @@ public class TankController : MonoBehaviour {
         GetComponent<Rigidbody>().velocity = newVelocity;
     }
 
-    void Shoot() {
+    void OnCollisionEnter(Collision coll) {
+        if (coll.gameObject.tag == "Bullet" && !invincible) {
+            Destroy(gameObject);
+        }
+    }
+
+        void Shoot() {
         if (weaponCooldown == 0) {
             bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized, Quaternion.identity) as GameObject;
 
