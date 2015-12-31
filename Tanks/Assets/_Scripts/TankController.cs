@@ -37,12 +37,14 @@ public class TankController : MonoBehaviour {
                 //Turning input
                 if (Input.GetKey(KeyCode.A))                                { turningInput = -1; }
                 if (Input.GetKey(KeyCode.D))                                { turningInput = 1; }
-                if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))   { turningInput = 0; }
+                if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))   { turningInput = 0; } //Neither pressed
+                if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))     { turningInput = 0; } //Both pressed
 
                 //Acceleration input
                 if (Input.GetKey(KeyCode.S))                                { accelerationInput = -1; }
                 if (Input.GetKey(KeyCode.W))                                { accelerationInput = 1; }
-                if (!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))   { accelerationInput = 0; }
+                if (!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))   { accelerationInput = 0; } //Neither pressed
+                if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.W))     { accelerationInput = 0; } //Both pressed
 
                 //Shoot shit!
                 if (Input.GetKey(KeyCode.Space))                            { Shoot(); }
@@ -51,12 +53,14 @@ public class TankController : MonoBehaviour {
                 //Turning input
                 if (Input.GetKey(KeyCode.LeftArrow))                                        { turningInput = -1; }
                 if (Input.GetKey(KeyCode.RightArrow))                                       { turningInput = 1; }
-                if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))  { turningInput = 0; }
+                if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))  { turningInput = 0; } //Neither pressed
+                if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightArrow))    { turningInput = 0; } //Both pressed
 
                 //Acceleration input
                 if (Input.GetKey(KeyCode.DownArrow))                                        { accelerationInput = -1; }
                 if (Input.GetKey(KeyCode.UpArrow))                                          { accelerationInput = 1; }
-                if (!Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.UpArrow))     { accelerationInput = 0; }
+                if (!Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.UpArrow))     { accelerationInput = 0; } //Neither pressed
+                if (Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.UpArrow))       { accelerationInput = 0; } //Both pressed
 
                 //Shoot shit!
                 if (Input.GetKey(KeyCode.KeypadEnter))                                      { Shoot(); }
@@ -65,7 +69,6 @@ public class TankController : MonoBehaviour {
                 print("INVALID PLAYERNUM");
                 break;
         }
-
         //Scale the inputs
         turningInput *= turnSpeed;
         accelerationInput *= moveSpeed;
