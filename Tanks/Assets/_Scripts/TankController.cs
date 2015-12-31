@@ -7,12 +7,13 @@ public class TankController : MonoBehaviour {
     public float        moveSpeed           = 1f;
     public float        turnSpeed           = 1f;
     public float        maxWeaponCooldown   = 1f;
+    public float        bulletSpawnOffset   = 1f;
     public bool         invincible          = false;
     public GameObject   bulletPrefab;
     public bool         _________________________________;
     public float        accelerationInput   = 0f;
     public float        turningInput        = 0f;
-    public float        weaponCooldown = 0f;
+    public float        weaponCooldown      = 0f;
     public Vector3      pos;
     public Vector3      rotation;  
     public GameObject   bullet;
@@ -87,7 +88,7 @@ public class TankController : MonoBehaviour {
 
         void Shoot() {
         if (weaponCooldown == 0) {
-            bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized, Quaternion.identity) as GameObject;
+            bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized * bulletSpawnOffset, Quaternion.identity) as GameObject;
 
             BulletController bulletController = (BulletController)bullet.GetComponent(typeof(BulletController));
 
