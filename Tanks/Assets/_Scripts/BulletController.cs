@@ -6,10 +6,12 @@ public class BulletController : MonoBehaviour {
 
     public float        bulletSpeed         = 1f;
     public Vector3      direction           = Vector3.zero;  //Make sure this vector always has a magnitude of 0 or 1
-    public int          maxBounces          = 0;
+    public int          maxBounces          = 0;    //Set this to -1 to bounce forever.
+    public float        maxTimeAlive        = 1f;   //Set this to -1 to live forever.
     public bool         _________________;
     public float        speedOffset         = 0.1f;
     public int          numBounces          = 0;
+    public float        timeAlive           = 0;   
     public Rigidbody    rigidBody;
 
     void Start() {
@@ -18,11 +20,15 @@ public class BulletController : MonoBehaviour {
 
     void FixedUpdate() {
         transform.position += direction * speedOffset * bulletSpeed;
+        timeAlive += Time.fixedDeltaTime;
+        if ((timeAlive >= maxTimeAlive) && (maxTimeAlive != -1)) {
+            Destroy(gameObject);
+        }
     }
 
 	void OnCollisionEnter(Collision coll) {
         if (coll.gameObject.tag == "Wall") {
-            if (numBounces < maxBounces) {
+            if (numBounces != maxBounces) {
                 ++numBounces;
 
                 //Bounce baby bounce!
