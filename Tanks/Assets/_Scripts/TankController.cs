@@ -3,13 +3,16 @@ using System.Collections;
 
 public class TankController : MonoBehaviour {
 
+    enum Weapon { Regular };
+
     public int          playerNum           = 0;
     public float        moveSpeed           = 1f;
     public float        turnSpeed           = 1f;
     public float        maxWeaponCooldown   = 1f;
     public float        bulletSpawnOffset   = 1f;
+    public int          currentWeapon       = (int)Weapon.Regular;
     public bool         invincible          = false;
-    public GameObject   bulletPrefab;
+    public GameObject   regularBulletPrefab;
     public bool         _________________________________;
     public float        accelerationInput   = 0f;
     public float        turningInput        = 0f;
@@ -17,6 +20,8 @@ public class TankController : MonoBehaviour {
     public Vector3      pos;
     public Vector3      rotation;  
     public GameObject   bullet;
+
+    
 
 	// Use this for initialization
 	void Start () {
@@ -89,10 +94,18 @@ public class TankController : MonoBehaviour {
         }
     }
 
-        void Shoot() {
+    void Shoot() {
         if (weaponCooldown == 0) {
-            bullet = Instantiate(bulletPrefab, pos + transform.forward.normalized * bulletSpawnOffset, Quaternion.identity) as GameObject;
+            switch (currentWeapon) {
+                case ((int)Weapon.Regular):
+                    bullet = Instantiate(regularBulletPrefab, pos + transform.forward.normalized * bulletSpawnOffset, Quaternion.identity) as GameObject;
+                    break;
+                default:
+                    print("Please specify bullet type");
+                    break;
+            }
 
+            //Too lazy to change this at the moment.  But we are going to need to use inheritance here for the different weapons.
             BulletController bulletController = (BulletController)bullet.GetComponent(typeof(BulletController));
 
             bulletController.direction = transform.forward.normalized;
