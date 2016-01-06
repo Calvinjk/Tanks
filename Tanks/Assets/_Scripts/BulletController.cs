@@ -15,18 +15,23 @@ public class BulletController : MonoBehaviour {
     public Rigidbody    rigidBody;
 
     void Start() {
+        //Remember the rigidbody attached to this object so we don't have to get it every time
         rigidBody = this.GetComponent<Rigidbody>();
     }
 
     void FixedUpdate() {
+        //Deal with moving the object based on its direction vector and how fast we want it to move
         transform.position += direction * speedOffset * bulletSpeed;
         timeAlive += Time.fixedDeltaTime;
+
+        //If bullet dies after a certain time, check that
         if ((timeAlive >= maxTimeAlive) && (maxTimeAlive != -1)) {
             Destroy(gameObject);
         }
     }
 
 	void OnCollisionEnter(Collision coll) {
+        //If it collides with a wall, should it bounce?
         if (coll.gameObject.tag == "Wall") {
             if (numBounces != maxBounces) {
                 ++numBounces;
@@ -38,6 +43,7 @@ public class BulletController : MonoBehaviour {
             }
         }
 
+        //If it collides with a player, destroy the bullet
         if (coll.gameObject.tag == "Player") {
             Destroy(gameObject);
         }
@@ -53,7 +59,7 @@ public class BulletController : MonoBehaviour {
         Vector3 newVelocity = Vector3.zero;
         Vector3 oldVelocity = direction;
 
-        //Figure out how to bounce!
+        //Figure out where to bounce!
         if (verticalOffset < horizontalOffset) {
             newVelocity = new Vector3(oldVelocity.x * -1, oldVelocity.y, oldVelocity.z);
         } else {    

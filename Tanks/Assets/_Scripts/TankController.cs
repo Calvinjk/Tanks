@@ -3,16 +3,16 @@ using System.Collections;
 
 public class TankController : MonoBehaviour {
 
-    enum Weapon { Regular };
+    enum Weapon { Regular };    //In order to add in new weapons, add them in here to the enum
 
-    public int          playerNum           = 0;
-    public float        moveSpeed           = 1f;
-    public float        turnSpeed           = 1f;
-    public float        maxWeaponCooldown   = 1f;
-    public float        bulletSpawnOffset   = 1f;
-    public int          currentWeapon       = (int)Weapon.Regular;
-    public bool         invincible          = false;
-    public GameObject   regularBulletPrefab;
+    public int          playerNum           = 0;                    //Default to zero.   If zero(unassigned) on object, will error and tell you
+    public float        moveSpeed           = 1f;                   //How fast the tank moves   
+    public float        turnSpeed           = 1f;                   //How fast the tank turns
+    public float        maxWeaponCooldown   = 1f;                   //Lower numbers shoot faster.  0 is fastest
+    public float        bulletSpawnOffset   = 1f;                   //How far away from the tank the bullet spawns
+    public int          currentWeapon       = (int)Weapon.Regular;  //What weapon is currently equipped
+    public bool         invincible          = false;                //Does the player die if shot?
+    public GameObject   regularBulletPrefab;                        //Prefab of a regular bullet
     public bool         _________________________________;
     public float        accelerationInput   = 0f;
     public float        turningInput        = 0f;
@@ -25,6 +25,7 @@ public class TankController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        //Save the inital position for use in movement
         pos = transform.position;
 	}
 
@@ -96,11 +97,13 @@ public class TankController : MonoBehaviour {
 
     void Shoot() {
         if (weaponCooldown == 0) {
-            switch (currentWeapon) {
+            //Add in a case if a new weapon is needed.  Remember to add it to the enum at the top of this file
+            //Bullet scripts should move them, so only things needed here are initializing and instantiation
+            switch (currentWeapon) { 
                 case ((int)Weapon.Regular):
                     bullet = Instantiate(regularBulletPrefab, pos + transform.forward.normalized * bulletSpawnOffset, Quaternion.identity) as GameObject;
                     break;
-                default:
+                default:  //If no valid enum is specified
                     print("Please specify bullet type");
                     break;
             }
