@@ -20,6 +20,7 @@ public class TankController : MonoBehaviour {
     public Vector3      pos;
     public Vector3      rotation;  
     public GameObject   bullet;
+    Globals             globals;
 
     
 
@@ -27,6 +28,8 @@ public class TankController : MonoBehaviour {
 	void Start () {
         //Save the inital position for use in movement
         pos = transform.position;
+
+        globals = (Globals)GameObject.Find("Global Variables").GetComponent(typeof(Globals));
 	}
 
     void FixedUpdate() {
@@ -91,7 +94,21 @@ public class TankController : MonoBehaviour {
 
     void OnCollisionEnter(Collision coll) {
         if (coll.gameObject.tag == "Bullet" && !invincible) {
+            switch(playerNum) {
+                case 1:
+                    ++globals.player2Score;
+                    break;
+                case 2:
+                    ++globals.player1Score;
+                    break;
+                default:
+                    print("Collision with invalid player number");
+                    break;
+            }
+
+
             Destroy(gameObject);
+            Application.LoadLevel(Application.loadedLevelName);       
         }
     }
 
